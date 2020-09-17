@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -22,7 +22,47 @@ class Users(db.Model):
 #First route
 @app.route('/')
 def index():
-    return "Hello, world!"
+    return "Test route yes!"
+
+#Api routes
+@app.route("/api/users", methods=["GET", "POST", "DELETE"])
+def users():
+    method = request.method
+    if (method.lower() == "get"): # READ
+        users = Users.query.all()
+        return jsonify([{"id": i.id, "username": i.username, "email": i.email, "password": i.pwd} for i in users]) # Get all values from db
+    elif (method.lower() == "post"): # CREATE
+        try:
+            username = request.json["username"]
+            email = request.json["email"]
+            pwd = request.json["pwd"]
+            if (username and pwd and email): # Checks if username, pwd or email are empty
+                try:
+                    user = Users(username, email, pwd) # Creates a new record
+                    db.session.add(user) # Adds the record for committing
+                    db.session.commit() # Saves our changes
+                    return jsonify({"success": True})
+                except Exception as e:
+                    return ({"error": e})
+            else:
+                return jsonify({"error": "Invalid form"}) # jsonify converts python vars to json
+        except:
+            return jsonify({"error": "Invalid form"})
+    elif (method.lower() == "delete"): # DESTROY
+        try:
+            uid = request.json["id"]
+            if (uid):
+                try:
+                    user = Users.query.get(uid) # Gets user with id = uid (because id is primary key)
+                    db.session.delete(user) # Delete the user
+                    db.session.commit() # Save
+                    return jsonify({"success": True})
+                except Exception as e:
+                    return jsonify({"error": e})
+            else:
+                return jsonify({"error": "Invalid form"})
+        except:
+            return jsonify({"error": "m"})
 
 # Setup liverefresh
 if __name__ == "__main__":
