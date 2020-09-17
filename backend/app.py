@@ -19,6 +19,7 @@ class Users(db.Model):
         self.email = email
         self.pwd = pwd
 
+db.create_all()
 #First route
 @app.route('/')
 def index():
@@ -62,8 +63,11 @@ def users():
             else:
                 return jsonify({"error": "Invalid form"})
         except:
-            return jsonify({"error": "m"})
+            return ({"error": "Invalid form"})
 
+if __name__ == "__main__":
+    app.run(debug=True)
+            
 # Setup liverefresh
 if __name__ == "__main__":
   app.run(debug=True)
