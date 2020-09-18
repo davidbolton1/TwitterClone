@@ -26,44 +26,36 @@ def index():
     return "Test route yes!"
 
 #Api routes
-@app.route("/api/users", methods=["GET", "POST", "DELETE"])
-def users():
-    method = request.method
-    if (method.lower() == "get"): # READ
-        users = Users.query.all()
-        return jsonify([{"id": i.id, "username": i.username, "email": i.email, "password": i.pwd} for i in users]) # Get all values from db
-    elif (method.lower() == "post"): # CREATE
+def getUsers():
+    users = Users.query.all()
+    return [{"id": i.id, "username": i.username, "email": i.email, "password": i.pwd} for i in users]
+
+def addUser(username, email, pwd):
+    if (username and pwd and email):
         try:
-            username = request.json["username"]
-            email = request.json["email"]
-            pwd = request.json["pwd"]
-            if (username and pwd and email): # Checks if username, pwd or email are empty
-                try:
-                    user = Users(username, email, pwd) # Creates a new record
-                    db.session.add(user) # Adds the record for committing
-                    db.session.commit() # Saves our changes
-                    return jsonify({"success": True})
-                except Exception as e:
-                    return ({"error": e})
-            else:
-                return jsonify({"error": "Invalid form"}) # jsonify converts python vars to json
-        except:
-            return jsonify({"error": "Invalid form"})
-    elif (method.lower() == "delete"): # DESTROY
+            user = Users(username, email, pwd)
+            db.session.add(user)
+            db.session.commit()
+            return True
+        except Exception as e:
+            print(e)
+            return False
+    else:
+        return False
+
+def removeUser(uid):
+    uid = request.json["id"]
+    if (uid):
         try:
-            uid = request.json["id"]
-            if (uid):
-                try:
-                    user = Users.query.get(uid) # Gets user with id = uid (because id is primary key)
-                    db.session.delete(user) # Delete the user
-                    db.session.commit() # Save
-                    return jsonify({"success": True})
-                except Exception as e:
-                    return jsonify({"error": e})
-            else:
-                return jsonify({"error": "Invalid form"})
-        except:
-            return ({"error": "Invalid form"})
+            user = Users.query.get(uid)
+            db.session.delete(user)
+            db.session.commit()
+            return True
+        except Exception as e:
+            print(e)
+            return False
+    else:
+        return False
 
 if __name__ == "__main__":
     app.run(debug=True)
