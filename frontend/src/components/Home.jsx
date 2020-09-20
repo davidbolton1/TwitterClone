@@ -6,7 +6,7 @@ function Home() {
             <div
                 className="w3-container w3-center w3-blue"
                 style={{ padding: "2rem" }}>
-                <h1 className="w3-jumbo">Quickr - Quick Twitter</h1>
+                <h1 className="w3-jumbo">David's Clone - Better Twitter?</h1>
                 <button
                     className="w3-button w3-pink"
                     style={{ marginRight: "1rem" }}>
