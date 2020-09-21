@@ -93,14 +93,14 @@ def register():
             return jsonify({"error": "User exists, please try again."})
         #Email validation
         # I SHOULD REALLY IMPROVE THIS WITH A LIBRARY!!!!
-        # Regex from https://blog.mailtrap.io/python-validate-email/
-        # Currently does not check for typos
-        if not re.match(r"^[a-z]([w-]*[a-z]|[w-.]*[a-z]{2,}|[a-z])*@[a-z]([w-]*[a-z]|[w-.]*[a-z]{2,}|[a-z]){4,}?.[a-z]{2,}$", email):
-            return jsonify({"error": "Invalid form"})
+        # Regex from https://stackoverflow.com/questions/8022530/how-to-check-for-valid-email-address
+        # Currently does not check for typos, and only does 2-3 TLD (.level1.level2.gmail.com) would error
+        if not re.match(r"^[\w\.\+\-]+\@[\w]+\.[a-z]{2,3}$", email):
+            return jsonify({"error": "An error occurred, please try again!"})
         addUser(username, email, password)
         return jsonify({"success": True})
     except:
-        return jsonify({"error": "Invalid form"})
+        return jsonify({"error": "An error occured, please try again!"})
 
 
 if __name__ == "__main__":
