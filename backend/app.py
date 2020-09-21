@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+import re
 
 app = Flask(__name__)
 
@@ -86,7 +87,22 @@ def register():
         email = email.lower()
         password = request.json["pwd"]
         username = request.json["username"]
-        
+        #First check if user exists w/ given information
+        users = getUsers()
+        if(len(list(filter(lambda x: x["email"] == email, users))) == 1):
+            return jsonify({"error": "User exists, please try again."})
+        #Email validation
+        # I SHOULD REALLY IMPROVE THIS WITH A LIBRARY!!!!
+        # Regex from https://blog.mailtrap.io/python-validate-email/
+        # Currently does not check for typos
+        if not re.match(r"^[a-z]([w-]*[a-z]|[w-.]*[a-z]{2,}|[a-z])*@[a-z]([w-]*[a-z]|[w-.]*[a-z]{2,}|[a-z]){4,}?.[a-z]{2,}$", email):
+            return jsonify({"error": "Invalid form"})
+        addUser(username, email, password)
+        return jsonify({"success": True})
+    except:
+        return jsonify({"error": "Invalid form"})
+
+
 if __name__ == "__main__":
     app.run(debug=True)
             
