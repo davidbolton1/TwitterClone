@@ -57,6 +57,20 @@ def removeUser(uid):
     else:
         return False
 
+@app.route("/api/login", methods=["POST"])
+def login():
+    try:
+        email = request.json["email"]
+        password = request.json["pwd"]
+        if (email and password):
+            users = getUsers()
+            
+            return jsonify(len(list(filter(lambda x: x["email"] == email and x["password"] == password, users))) == 1)
+        else:
+            return jsonify({"error": "Invalid form"})
+    except:
+        return jsonify({"error": "Invalid form"})
+        
 if __name__ == "__main__":
     app.run(debug=True)
             
