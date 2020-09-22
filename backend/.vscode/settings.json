@@ -2,6 +2,7 @@
   "python.pythonPath": "venv/bin/python",
   "python.linting.pylintEnabled": true,
   "python.linting.enabled": true,
+  "python.languageServer": "Jedi",
   "python.linting.pylintArgs": [
     "--load-plugins",
     "pylint-flask"

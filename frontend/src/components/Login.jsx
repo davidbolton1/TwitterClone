@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import Alert from "./Alert";
+import Alert from "./modul";
 
 class Login extends Component {
     state = { err: "" };

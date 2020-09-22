@@ -7,6 +7,7 @@ app = Flask(__name__)
 
 # Set db file to users.db
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
+CORS(app)
 # Database with SQLAlchemy
 db = SQLAlchemy(app)
 class Users(db.Model):
