@@ -10,9 +10,9 @@ function App() {
         <React.Fragment>
             <Navbar />
             <Router>
-                <Route path="/" exact component={Home} />
-                <Route path="/login" exact component={Login} />
-                <Route path="/register" exact component={Register} />
+                <Route path="/" component={Home} />
+                <Route path="/login" component={Login} />
+                <Route path="/register" component={Register} />
             </Router>
         </React.Fragment>
     );
