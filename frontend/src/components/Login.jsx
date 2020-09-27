@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import Alert from "./modul";
 
+// Main component
 class Login extends Component {
     state = { err: "" };
 
